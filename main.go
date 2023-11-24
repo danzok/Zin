@@ -7,18 +7,8 @@ import (
 )
 
 func main() {
-	/*
-		//https://pkg.go.dev/github.com/Valgard/godotenv#section-readme
-		dotenv := godotenv.New()
-		if err := dotenv.Load(".env"); err != nil {
-			panic(err)
-		}
 
-		tokenBOt := os.Getenv("TOKEN")
-
-		fmt.Println(tokenBOt)
-	*/
-	bot, err := tgbotapi.NewBotAPI("your token")
+	bot, err := tgbotapi.NewBotAPI("6751654636:AAFJrNrTEBEfR3JMfrKzp2GLzxKYjTYYlW0")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -36,10 +26,26 @@ func main() {
 		if update.Message != nil {
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
-			msg.ReplyToMessageID = update.Message.MessageID
+			if !update.Message.IsCommand() { // ignore any non-command Messages
+				continue
+			}
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 
-			bot.Send(msg)
+			// Extract the command from the Message.
+			switch update.Message.Command() {
+			case "help":
+				msg.Text = "I understand /sayhi and /status."
+			case "sayhi":
+				msg.Text = "Hi :)"
+			case "status":
+				msg.Text = "I'm ok."
+			default:
+				msg.Text = "I don't know that command"
+			}
+
+			if _, err := bot.Send(msg); err != nil {
+				log.Panic(err)
+			}
 		}
 	}
 }
