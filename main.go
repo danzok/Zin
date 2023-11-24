@@ -35,10 +35,12 @@ func main() {
 			switch update.Message.Command() {
 			case "help":
 				msg.Text = "I understand /sayhi and /status."
-			case "sayhi":
-				msg.Text = "Hi :)"
+			case "start":
+				msg.Text = "Olá  , sou um bot que converte cookie plain ou base64  para o formato json , com a ajuda do site accovod.com, apenas me envie o comando  /format aqui é seu cookie"
 			case "status":
-				msg.Text = "I'm ok."
+				msg.Text = "I'm ok. and running hehe"
+			case "format":
+				msg.Text = "comando format criado"
 			default:
 				msg.Text = "I don't know that command"
 			}
